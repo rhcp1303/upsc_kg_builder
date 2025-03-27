@@ -3,14 +3,15 @@ import time
 from django.core.management.base import BaseCommand
 import logging
 from ...helpers import prepare_ner_model_training_data_helper as helper
-import  json
+import json
 from ...helpers import extract_text_helper as eth
 from langchain.text_splitter import CharacterTextSplitter
 
 logger = logging.getLogger(__name__)
 
+
 class Command(BaseCommand):
-    help = 'This is a utility management command for getting custom named entities for upsc content'
+    help = 'This is a utility management command for preparing training data for custom named entities recognition model for upsc content'
 
     def handle(self, *args, **options):
         pdf_extractor = eth.select_pdf_extractor("digital", 1, "no")

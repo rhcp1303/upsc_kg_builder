@@ -1,18 +1,22 @@
+import time
 from django.core.management.base import BaseCommand
 import logging
+from ...helpers import prepare_relation_extraction_model_training_data_helper as relations_helper
+import json
+from ...helpers import extract_text_helper as eth
+from langchain.text_splitter import CharacterTextSplitter
 import spacy
 
 logger = logging.getLogger(__name__)
 
+nlp_trained = spacy.load("trained_spacy_model")
+
 
 class Command(BaseCommand):
-    help = 'This is a utility management command for using trained spacy model to get custom named entities for upsc'
+    help = 'This is a utility management command for preparing training data for relationship extraction model for upsc content'
 
     def handle(self, *args, **options):
-        output_directory = "trained_spacy_model"
-        nlp_trained = spacy.load(output_directory)
-
-        test_text = '''
+        text_example = '''
 
         In the subsequent century, stupas were elaborately built with certain additions like the enclosing of the circumambulatory path with railings and sculptural decoration. There were numerous stupas constructed earlier but expansions or new additions were made in the second century BCE. The stupa consists of a cylindrical drum and a circular anda with a harmika and chhatra on the top which remain consistent throughout with minor variations and changes in shape and size. Apart from the circumambulatory path, gateways were added. Thus, with the elaborations in stupa architecture, there was ample space for the architects and sculptors to plan elaborations and to carve out images.
 During the early phase of Buddhism, Buddha is depicted symbolically through footprints, stupas, lotus throne, chakra, etc. This indicates either simple worship, or paying respect, or at times depicts historisisation of life events. Gradually narrative became a part of the Buddhist tradition. Thus events from the life of the Buddha, the Jataka stories, were depicted on the railings and torans of the stupas. Mainly synoptic narrative, continuous narrative and episodic narrative are used in the pictorial tradition. While events from the life of the Buddha became an important theme in all the Buddhist monuments, the Jataka stories also became equally important for sculptural decorations. The main events associated with the Buddha’s life which were frequently depicted were events related to the birth, renunciation, enlightenment, dhammachakra- pravartana, and mahaparinibbana (death). Among the Jataka stories that are frequently depicted are Chhadanta Jataka, Vidurpundita Jataka, Ruru Jataka, Sibi Jataka, Vessantara Jataka and Shama Jataka.
@@ -32,7 +36,12 @@ Yakshini, Bharhut
 
         '''
 
-        doc = nlp_trained(test_text)
-        print(doc)
-        for ent in doc.ents:
-            print(ent.text, ent.start_char, ent.end_char, ent.label_)
+        doc = nlp_trained(text_example)
+        spacy_entities = [(ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
+
+        relation_output = relations_helper.get_relations_from_llm_for_spacy(text_example, spacy_entities)
+        if relation_output:
+            text_rel, relations_data = relation_output
+            print("\nRelations Data:")
+            print(relations_data)
+
