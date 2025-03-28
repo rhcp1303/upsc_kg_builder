@@ -22,3 +22,4 @@ def train_spacy_ner(train_data, output_path, n_iter=100):
 
     nlp.to_disk(output_path)
     print(f"Trained model saved to {output_path}")
+

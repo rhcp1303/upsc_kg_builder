@@ -36,12 +36,17 @@ Yakshini, Bharhut
 
         '''
 
-        doc = nlp_trained(text_example)
-        spacy_entities = [(ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
-
-        relation_output = relations_helper.get_relations_from_llm_for_spacy(text_example, spacy_entities)
-        if relation_output:
-            text_rel, relations_data = relation_output
-            print("\nRelations Data:")
-            print(relations_data)
+        pdf_extractor = eth.select_pdf_extractor("digital", 1, "no")
+        extracted_text = pdf_extractor.extract_text("/Users/ankit.anand/Desktop/hac.pdf")
+        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0, separator=".")
+        pdf_chunks = text_splitter.split_text(extracted_text)
+        l = []
+        for i in range(len(pdf_chunks)):
+            doc = nlp_trained(pdf_chunks[i])
+            spacy_entities = [(ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
+            training_datapoint = relations_helper.get_relations_from_llm_for_spacy(pdf_chunks[i], spacy_entities)
+            l.append(training_datapoint)
+            time.sleep(5)
+        with open("temp/relation_training_data.json", "w") as file:
+            file.write(json.dumps(l))
 

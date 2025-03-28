@@ -2,7 +2,7 @@ import json
 
 from django.core.management.base import BaseCommand
 import logging
-from ...helpers import spacy_model_helper as helper
+from ...helpers import ner_spacy_model_helper as helper
 
 logger = logging.getLogger(__name__)
 
