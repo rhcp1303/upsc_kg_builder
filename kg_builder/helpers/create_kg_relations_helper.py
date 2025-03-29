@@ -37,6 +37,7 @@ def create_relationship(tx, entity1_data, entity2_data, relation):
 
 def insert_relationships(tx, relationships_list):
     for relationship_data in relationships_list:
+        print(relationship_data)
         create_relationship(tx, relationship_data["entity1"], relationship_data["entity2"],
                             relationship_data["relation"])
 

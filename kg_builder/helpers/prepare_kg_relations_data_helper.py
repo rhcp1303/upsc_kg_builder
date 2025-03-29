@@ -76,9 +76,9 @@ Provide the output as a single JSON object without any backticks. The JSON objec
 
         except json.JSONDecodeError:
             print(f"Error decoding JSON from LLM: {llm_output}")
-            return [text, {"relationships": []}]
+            return [text, []]
     except Exception as e:
         print(f"Error calling Google Gemini API: {e}")
-        return [text, {"relationships": []}]
+        return [text, []]
 
 
