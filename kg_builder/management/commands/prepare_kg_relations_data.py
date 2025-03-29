@@ -14,8 +14,8 @@ class Command(BaseCommand):
     help = 'This is a utility management command for preparing training data for custom named entities recognition model for upsc content'
 
     def handle(self, *args, **options):
-        pdf_extractor = eth.select_pdf_extractor("digital", 1, "no")
-        extracted_text = pdf_extractor.extract_text("/Users/ankit.anand/Desktop/sample.pdf")
+        pdf_extractor = eth.select_pdf_extractor("scanned", 2, "no")
+        extracted_text = pdf_extractor.extract_text("/Users/ankit.anand/Desktop/old_ancient.pdf")
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0, separator=".")
         pdf_chunks = text_splitter.split_text(extracted_text)
         l = []
@@ -27,5 +27,5 @@ class Command(BaseCommand):
                 print("Relationships with Labels:", result_json)
                 l.append(result_dict)
             time.sleep(5)
-        with open("temp/sample.json", "w") as file:
+        with open("temp/old_ancient.json", "w") as file:
             file.write(json.dumps(l))
