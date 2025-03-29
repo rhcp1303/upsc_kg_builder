@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'This is a utility management command for training spacy model'
 
     def handle(self, *args, **options):
-        with open("temp/training_data.json", "r") as f:
+        with open("temp/fine_arts_ner_training_data.json", "r") as f:
             train_data_json = f.read()
             train_data = json.loads(train_data_json)
         output_directory = "trained_spacy_model"

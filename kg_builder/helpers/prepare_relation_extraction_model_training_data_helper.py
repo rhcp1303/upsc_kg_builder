@@ -16,6 +16,7 @@ def get_relations_from_llm_for_spacy(text, entities):
     entity_mentions = []
     for start, end, label in entities:
         entity_mentions.append(f"'{text[start:end]}' ({label})")
+        print(text[start:end]+" : "+label)
 
     prompt = f"""
        Identify and extract relationships between the following named entities present in the text below, focusing on relationships relevant to the UPSC syllabus.
@@ -41,6 +42,60 @@ def get_relations_from_llm_for_spacy(text, entities):
          {{ "entity1": "Climate Change", "entity2": "Global Warming", "relation": "cause_of" }}
        ]
        """
+
+    def consolidated_prompt(text):
+        prompt = f"""
+    Identify named entities and their relationships in the following text, focusing on relevance to the UPSC syllabus.
+
+    Text:
+    {text}
+
+    **Output Format**:
+
+    Provide the output as a single JSON object without any backticks. The JSON object should have one key: "relationships".
+
+    * **"relationships"**: A JSON list of dictionaries, where each dictionary describes a relationship and includes the NER labels of the involved entities. Each relationship dictionary should have the following structure:
+      {{
+        "entity1": {{ "text": "text of entity 1", "label": "NER label of entity 1" }},
+        "entity2": {{ "text": "text of entity 2", "label": "NER label of entity 2" }},
+        "relation": "concise label describing the relationship"
+      }}
+
+    **Constraints**:
+
+    * Only include relationships between entities that are highly relevant to the UPSC context. Do not include trivial relationships.
+
+    **Example Output:**
+    {{
+      "relationships": [
+        {{
+          "entity1": {{ "text": "Indian Constitution", "label": "POLITICAL_DOCUMENT" }},
+          "entity2": {{ "text": "Fundamental Rights", "label": "LEGAL_CONCEPT" }},
+          "relation": "contains"
+        }},
+        {{
+          "entity1": {{ "text": "Indus Valley Civilization", "label": "HISTORICAL_PERIOD" }},
+          "entity2": {{ "text": "Harappa", "label": "ARCHAEOLOGICAL_SITE" }},
+          "relation": "site_of"
+        }},
+        {{
+          "entity1": {{ "text": "Climate Change", "label": "ENVIRONMENTAL_ISSUE" }},
+          "entity2": {{ "text": "Global Warming", "label": "ENVIRONMENTAL_PROCESS" }},
+          "relation": "causes"
+        }}
+      ]
+    }}
+    """
+        return prompt
+
+    # Example usage:
+    text_input = """
+    The Indian Constitution guarantees Fundamental Rights to all its citizens. The Indus Valley Civilization, with its major site at Harappa, is a significant part of ancient Indian history. Climate Change, leading to Global Warming, is a pressing environmental issue.
+    """
+
+    final_prompt = consolidated_prompt(text_input)
+    print(final_prompt)
+
     try:
         response = llm.invoke(prompt)
         llm_output = response.content.strip()

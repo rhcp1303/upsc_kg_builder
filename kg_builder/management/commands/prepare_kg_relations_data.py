@@ -2,7 +2,7 @@ import time
 
 from django.core.management.base import BaseCommand
 import logging
-from ...helpers import prepare_ner_model_training_data_helper as helper
+from ...helpers import prepare_kg_relations_data_helper as helper
 import json
 from ...helpers import extract_text_helper as eth
 from langchain.text_splitter import CharacterTextSplitter
@@ -15,13 +15,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         pdf_extractor = eth.select_pdf_extractor("digital", 1, "no")
-        extracted_text = pdf_extractor.extract_text("/Users/ankit.anand/Desktop/hac.pdf")
+        extracted_text = pdf_extractor.extract_text("/Users/ankit.anand/Desktop/sample.pdf")
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0, separator=".")
         pdf_chunks = text_splitter.split_text(extracted_text)
         l = []
         for i in range(len(pdf_chunks)):
-            training_datapoint = helper.get_ner_labels_from_llm_for_spacy(pdf_chunks[i])
-            l.append(training_datapoint)
+            text_with_relationships = helper.get_entities_and_relations_from_llm(pdf_chunks[i])
+            if text_with_relationships:
+                text, result_dict = text_with_relationships
+                result_json = json.dumps(result_dict, indent=2)
+                print("Relationships with Labels:", result_json)
+                l.append(result_dict)
             time.sleep(5)
-        with open("temp/fine_arts_ner_training_data.json", "w") as file:
+        with open("temp/sample.json", "w") as file:
             file.write(json.dumps(l))

@@ -35,8 +35,12 @@ class SingleColumnDigitalPDFExtractor(PDFExtractor):
             raise
 
     def extract_text(self, pdf_file_path):
+        print("here")
         try:
+            print("here")
+            print(pdf_file_path)
             number_of_pages = len(pdfplumber.open(pdf_file_path).pages)
+            print(number_of_pages)
             with ProcessPoolExecutor(max_workers=4) as executor:
                 results = list(
                     executor.map(self.extract_page_text, [pdf_file_path] * number_of_pages, range(number_of_pages)))
@@ -65,12 +69,17 @@ class SingleColumnScannedPDFExtractorUsingLLM(PDFExtractor):
             raise
 
     def extract_text(self, pdf_file_path):
+        print("here")
+
         try:
+            print("here")
             with ProcessPoolExecutor(max_workers=1) as executor:
+                print("here")
+
                 number_of_pages = len(pdfplumber.open(pdf_file_path).pages)
                 results = list(
                     executor.map(self.extract_page_text, [pdf_file_path] * number_of_pages,
-                                 range(22, 31)))
+                                 range(number_of_pages)))
                 return "\n".join(results)
         except Exception as e:
             print(f"Error processing PDF: {e}")
@@ -98,9 +107,17 @@ class SingleColumnScannedPDFExtractorUsingOCR(PDFExtractor):
             raise
 
     def extract_text(self, pdf_file_path):
+        print("here")
+
         try:
+            print("here")
+
             with ProcessPoolExecutor(max_workers=4) as executor:
+                print("here")
+
                 number_of_pages = len(pdfplumber.open(pdf_file_path).pages)
+                print("here")
+
                 results = list(
                     executor.map(self.extract_page_text, [pdf_file_path] * number_of_pages, range(number_of_pages)))
                 return "\n".join(results)
