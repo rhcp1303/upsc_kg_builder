@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 import logging
 from neo4j import GraphDatabase
 from ...helpers import create_kg_relations_helper as kgh
-from ...helpers import extract_text_helper as eth
 
 logger = logging.getLogger(__name__)
 
