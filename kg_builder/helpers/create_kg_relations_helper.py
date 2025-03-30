@@ -48,6 +48,11 @@ def create_and_insert_relations_into_kg(json_file_path):
     data = json.loads(json_data)
     with driver.session() as session:
         for relationships in data:
-            session.execute_write(insert_relationships, relationships)
+            try:
+                session.execute_write(insert_relationships, relationships)
+            except Exception as e:
+                print(e)
+                continue
+
     print("Relationships inserted successfully into Neo4j.")
     driver.close()
