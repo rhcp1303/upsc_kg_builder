@@ -36,7 +36,7 @@ def get_paths_any_label(tx, entity_text, max_depth=3):
         for segment in record["p"].relationships:
             path_data.append({
                 "start_node": segment.start_node._properties,
-                "relation": segment.type,
+                "relation": segment._properties,
                 "end_node": segment.end_node._properties
             })
         paths.append(path_data)
