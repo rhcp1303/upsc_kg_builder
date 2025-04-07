@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         pdf_extractor = eth.select_pdf_extractor("digital", 1, "no")
-        extracted_text = pdf_extractor.extract_text("/Users/ankit.anand/Desktop/nitin_singhania.pdf")
+        extracted_text = pdf_extractor.extract_text("/Users/ankit.anand/Desktop/vivek_singh.pdf")
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0, separator=".")
         pdf_chunks = text_splitter.split_text(extracted_text)
         l = []
@@ -27,5 +27,5 @@ class Command(BaseCommand):
                 print("Relationships with Labels:", result_json)
                 l.append(result_dict)
             time.sleep(5)
-        with open("temp/nitin_singhania.json", "w") as file:
+        with open("temp/vivek_singh.json", "w") as file:
             file.write(json.dumps(l))

@@ -9,10 +9,11 @@ class Command(BaseCommand):
     help = 'This is a utility management command for querying knowledge graph'
 
     def handle(self, *args, **options):
-        target_entity_text = "Rudradaman"
-        all_paths = helper.get_paths_from_entity_any_label(target_entity_text, max_depth=2)
+        target_entity_text = "Kanishka"
+        all_paths = helper.get_paths_from_entity_any_label(target_entity_text, max_depth=3)
+        # print(all_paths)
         print(f"\nAll paths starting from node with text '{target_entity_text}' (any label, up to depth 3):")
-        for path in all_paths:
+        for path in all_paths[0:20]:
             print("  Path:")
             for segment in path:
                 print(f"    Start: {segment['start_node']['text']} ({segment['start_node'].get('label', 'No Label')})")
