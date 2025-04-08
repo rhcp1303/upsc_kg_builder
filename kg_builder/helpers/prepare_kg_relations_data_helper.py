@@ -9,7 +9,7 @@ api_key_3 = "AIzaSyAA39dIq31iDJR-i7mZRWEKhkVVIr1Bz4g"
 api_key_4 = "AIzaSyD0nx9rH7HhQZDpJrY0hOaOR9Xok4r-liM"
 api_key_5 = "AIzaSyBq2_GdMf0KhowSVSb0hn4Z_8B81kBewXY"
 api_key = "AIzaSyBq2_GdMf0KhowSVSb0hn4Z_8B81kBewXY"
-os.environ["GOOGLE_API_KEY"] = api_key_5
+os.environ["GOOGLE_API_KEY"] = api_key_1
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
 nlp_trained = spacy.load("trained_spacy_model")
 
