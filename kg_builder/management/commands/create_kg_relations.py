@@ -16,5 +16,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         graph_db = GraphDatabase.driver(uri, auth=(user, password))
-        kgh.create_and_insert_relations_into_kg("temp/pmfias_south_america.json")
+        kgh.create_and_insert_relations_into_kg("temp/updated2_2024.json")
         graph_db.close()
